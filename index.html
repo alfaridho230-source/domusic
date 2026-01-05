@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking DO Music - Platform Booking Musik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --primary-dark: #6a1cb0;
+            --secondary: #ff6b6b;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+            --gray: #dfe6e9;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 4px;
+            background-color: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ff5252;
+        }
+        
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .music-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: linear-gradient(to bottom right, white, #f8f9fa);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .music-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .music-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 4px solid var(--primary);
+        }
+        
+        .music-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .music-genre {
+            display: inline-block;
+            background-color: var(--light);
+            color: var(--dark);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .booking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .booking-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .booking-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .status.confirmed {
+            background-color: rgba(0, 184, 148, 0.2);
+            color: var(--success);
+        }
+        
+        .status.pending {
+            background-color: rgba(253, 203, 110, 0.2);
+            color: #e17055;
+        }
+        
+        .status.cancelled {
+            background-color: rgba(214, 48, 49, 0.1);
+            color: var(--danger);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-item {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                <h1>Booking DO Music</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-page="home">Beranda</a></li>
+                    <li><a href="#booking" class="nav-link" data-page="booking">Booking Music</a></li>
+                    <li><a href="#schedule" class="nav-link" data-page="schedule">Jadwal Saya</a></li>
+                    <li><a href="#manage" class="nav-link" data-page="manage">Kelola Music</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Halaman Beranda -->
+        <section id="home-page" class="page active">
+            <h2 class="section-title">Selamat Datang di Booking DO Music</h2>
+            <div class="card">
+                <h3>Temukan Musik Terbaik untuk Acara Anda</h3>
+                <p>Platform booking musik terpercaya dengan berbagai pilihan genre musik favorit Anda dengan mudah dan cepat!</p>
+                
+                <div class="stats">
+                    <h4 style="margin-top: 20px;">Statistik Booking</h4>
+                    <div style="display: flex; gap: 20px; margin-top: 15px;">
+                        <div style="background: #f0f8ff; padding: 15px; border-radius: 10px; flex: 1;">
+                            <h3 id="total-music-count">0</h3>
+                            <p>Paket Music Tersedia</p>
+                        </div>
+                        <div style="background: #f0fff0; padding: 15px; border-radius: 10px; flex: 1;">
+                            <h3 id="total-bookings-count">0</h3>
+                            <p>Total Booking</p>
+                        </div>
+                        <div style="background: #fff0f5; padding: 15px; border-radius: 10px; flex: 1;">
+                            <h3 id="active-bookings-count">0</h3>
+                            <p>Booking Aktif</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Cara Booking Musik</h3>
+                <ol style="padding-left: 20px; margin-top: 10px;">
+                    <li>Pilih menu "Booking Music" di navigasi atas</li>
+                    <li>Pilih paket musik yang tersedia sesuai genre yang Anda inginkan</li>
+                    <li>Isi formulir booking dengan detail acara Anda</li>
+                    <li>Submit booking dan tunggu konfirmasi</li>
+                    <li>Pantau status booking di menu "Jadwal Saya"</li>
+                </ol>
+            </div>
+        </section>
+        
+        <!-- Halaman Booking -->
+        <section id="booking-page" class="page">
+            <h2 class="section-title">Booking DO Music</h2>
+            <div class="card">
+                <h3>Pilih Paket Musik untuk Acara Anda</h3>
+                <p>Silakan pilih paket musik dari daftar di bawah ini, kemudian isi formulir booking.</p>
+                
+                <div class="music-grid" id="music-list">
+                    <!-- music cards will be generated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Formulir Booking</h3>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="selected-music">Paket Musik yang Dipilih</label>
+                        <input type="text" id="selected-music" readonly placeholder="Pilih paket musik terlebih dahulu dari daftar di atas">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-name">Nama Lengkap</label>
+                        <input type="text" id="customer-name" required placeholder="Masukkan nama lengkap Anda">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-phone">Nomor Telepon</label>
+                        <input type="tel" id="customer-phone" required placeholder="Masukkan nomor telepon aktif">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-type">Jenis Acara</label>
+                        <select id="event-type" required>
+                            <option value="">Pilih jenis acara</option>
+                            <option value="wedding">Pernikahan</option>
+                            <option value="birthday">Ulang Tahun</option>
+                            <option value="corporate">Acara Perusahaan</option>
+                            <option value="concert">Konser</option>
+                            <option value="party">Pesta</option>
+                            <option value="other">Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-date">Tanggal Acara</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-time">Waktu Acara</label>
+                        <input type="time" id="event-time" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="event-location">Lokasi Acara</label>
+                        <input type="text" id="event-location" required placeholder="Masukkan alamat lengkap acara">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="special-request">Permintaan Khusus (opsional)</label>
+                        <textarea id="special-request" rows="3" placeholder="Masukkan permintaan khusus seperti lagu tertentu, durasi, dll."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Submit Booking</button>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Halaman Jadwal -->
+        <section id="schedule-page" class="page">
+            <h2 class="section-title">Jadwal Booking Saya</h2>
+            
+            <div class="booking-list" id="bookings-container">
+                <!-- Bookings will be loaded here -->
+            </div>
+            
+            <div id="no-bookings" class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h3>Belum Ada Booking</h3>
+                <p>Anda belum memiliki jadwal booking. Silakan booking musik terlebih dahulu.</p>
+            </div>
+        </section>
+        
+        <!-- Halaman Kelola Musik -->
+        <section id="manage-page" class="page">
+            <h2 class="section-title">Kelola Data Paket Musik</h2>
+            
+            <div class="card">
+                <h3>Tambah Paket Musik Baru</h3>
+                <form id="add-music-form">
+                    <div class="form-group">
+                        <label for="music-name">Nama Paket Musik</label>
+                        <input type="text" id="music-name" required placeholder="Masukkan nama paket musik">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="music-genre">Genre Musik</label>
+                        <select id="music-genre" required>
+                            <option value="">Pilih genre musik</option>
+                            <option value="Dangdut">Dangdut</option>
+                            <option value="Koplo">Koplo</option>
+                            <option value="Jhandutan">Jhandutan</option>
+                            <option value="Langgam">Langgam</option>
+                            <option value="Jaranan">Jaranan</option>
+                            <option value="Hadrah">Hadrah</option>
+                            <option value="DO Music 2015">DO Music 2015</option>
+                            <option value="Mix">Mix</option>
+                            <option value="Pop">Pop</option>
+                            <option value="Rock">Rock</option>
+                            <option value="Reggae">Reggae</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="music-duration">Durasi (jam)</label>
+                        <input type="number" id="music-duration" min="1" required placeholder="Masukkan durasi paket">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="music-rate">Harga Paket (Rp)</label>
+                        <input type="number" id="music-rate" min="0" required placeholder="Masukkan harga paket">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="music-description">Deskripsi Paket</label>
+                        <textarea id="music-description" rows="3" required placeholder="Masukkan deskripsi paket musik"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Tambah Paket Musik</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h3>Daftar Paket Musik Tersedia</h3>
+                <div id="music-management-list">
+                    <!-- Music list for management will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Booking DO Music. Semua hak dilindungi.</p>
+            <p>Platform booking musik terpercaya untuk berbagai acara.</p>
+            <div style="margin-top: 15px;">
+                <i class="fas fa-phone"></i> (021) 1234-5678 | 
+                <i class="fas fa-envelope"></i> info@bookingdomusic.com
+            </div>
+        </div>
+    </footer>
+    
+    <div id="notification-area"></div>
+
+    <script>
+        // ============================
+        // IMPLEMENTASI OOP 4 PILAR
+        // ============================
+        
+        // 1. ENKAPSULASI - Membungkus data dan metode dalam kelas
+        class MusicPackage {
+            constructor(id, name, genre, duration, rate, description) {
+                // Data private (encapsulated)
+                this._id = id;
+                this._name = name;
+                this._genre = genre;
+                this._duration = duration;
+                this._rate = rate;
+                this._description = description;
+            }
+            
+            // Getter methods untuk mengakses data private
+            get id() {
+                return this._id;
+            }
+            
+            get name() {
+                return this._name;
+            }
+            
+            get genre() {
+                return this._genre;
+            }
+            
+            get duration() {
+                return this._duration;
+            }
+            
+            get rate() {
+                return this._rate;
+            }
+            
+            get description() {
+                return this._description;
+            }
+            
+            // Metode untuk menampilkan informasi musik
+            displayInfo() {
+                return `${this._name} - ${this._genre} (${this._duration} jam)`;
+            }
+            
+            // Metode untuk format harga
+            formattedRate() {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR'
+                }).format(this._rate);
+            }
+        }
+        
+        // 2. INHERITANCE - Pewarisan sifat dari kelas induk
+        class Booking extends MusicPackage {
+            constructor(musicPackage, customerName, customerPhone, eventType, eventDate, eventTime, eventLocation, specialRequest = "") {
+                // Memanggil constructor parent class
+                super(musicPackage.id, musicPackage.name, musicPackage.genre, musicPackage.duration, musicPackage.rate, musicPackage.description);
+                
+                // Properti khusus booking
+                this._bookingId = Date.now() + Math.floor(Math.random() * 1000);
+                this._customerName = customerName;
+                this._customerPhone = customerPhone;
+                this._eventType = eventType;
+                this._eventDate = eventDate;
+                this._eventTime = eventTime;
+                this._eventLocation = eventLocation;
+                this._specialRequest = specialRequest;
+                this._status = "pending"; // pending, confirmed, cancelled
+                this._bookingDate = new Date().toISOString().split('T')[0];
+            }
+            
+            // Getter untuk properti booking
+            get bookingId() {
+                return this._bookingId;
+            }
+            
+            get customerName() {
+                return this._customerName;
+            }
+            
+            get status() {
+                return this._status;
+            }
+            
+            set status(newStatus) {
+                const validStatuses = ["pending", "confirmed", "cancelled"];
+                if (validStatuses.includes(newStatus)) {
+                    this._status = newStatus;
+                }
+            }
+            
+            // 3. POLIMORFISME - Override metode displayInfo dari parent class
+            displayInfo() {
+                return `Booking #${this._bookingId}: ${this._customerName} memesan ${this._name} untuk acara ${this._eventType}`;
+            }
+            
+            // Metode untuk mendapatkan detail booking
+            getBookingDetails() {
+                return {
+                    bookingId: this._bookingId,
+                    musicName: this._name,
+                    customerName: this._customerName,
+                    customerPhone: this._customerPhone,
+                    eventType: this._eventType,
+                    eventDate: this._eventDate,
+                    eventTime: this._eventTime,
+                    eventLocation: this._eventLocation,
+                    specialRequest: this._specialRequest,
+                    status: this._status,
+                    bookingDate: this._bookingDate,
+                    duration: this._duration,
+                    rate: this._rate
+                };
+            }
+        }
+        
+        // 4. ABSTRAKSI - Kelas abstrak untuk manajemen data
+        class DataManager {
+            constructor() {
+                if (this.constructor === DataManager) {
+                    throw new Error("Cannot instantiate abstract class DataManager");
+                }
+            }
+            
+            // Metode abstrak yang harus diimplementasikan oleh subclass
+            saveData(key, data) {
+                throw new Error("Method 'saveData()' must be implemented");
+            }
+            
+            loadData(key) {
+                throw new Error("Method 'loadData()' must be implemented");
+            }
+            
+            removeData(key) {
+                throw new Error("Method 'removeData()' must be implemented");
+            }
+        }
+        
+        // Implementasi konkrit dari DataManager untuk Local Storage
+        class LocalStorageManager extends DataManager {
+            saveData(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+                return true;
+            }
+            
+            loadData(key) {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            }
+            
+            removeData(key) {
+                localStorage.removeItem(key);
+                return true;
+            }
+        }
+        
+        // ============================
+        // APLIKASI UTAMA
+        // ============================
+        
+        class BookingApp {
+            constructor() {
+                // Inisialisasi data manager
+                this.storageManager = new LocalStorageManager();
+                
+                // Inisialisasi data
+                this.musicPackages = [];
+                this.bookings = [];
+                this.selectedMusic = null;
+                
+                // Load data dari Local Storage
+                this.loadData();
+                
+                // Inisialisasi UI
+                this.initUI();
+                
+                // Tampilkan halaman awal
+                this.showPage('home');
+                
+                // Update statistik
+                this.updateStats();
+            }
+            
+            // Load data dari Local Storage
+            loadData() {
+                // Load music packages
+                const savedMusic = this.storageManager.loadData('booking_music_packages');
+                if (savedMusic && savedMusic.length > 0) {
+                    this.musicPackages = savedMusic.map(music => new MusicPackage(
+                        music._id, 
+                        music._name, 
+                        music._genre, 
+                        music._duration, 
+                        music._rate, 
+                        music._description
+                    ));
+                } else {
+                    // Data default jika tidak ada data di Local Storage
+                    this.initializeDefaultMusic();
+                }
+                
+                // Load bookings
+                const savedBookings = this.storageManager.loadData('booking_music_bookings');
+                if (savedBookings && savedBookings.length > 0) {
+                    this.bookings = savedBookings.map(booking => {
+                        // Cari music package berdasarkan ID
+                        const musicPackage = this.musicPackages.find(m => m.id === booking._id);
+                        if (musicPackage) {
+                            const newBooking = new Booking(
+                                musicPackage,
+                                booking._customerName,
+                                booking._customerPhone,
+                                booking._eventType,
+                                booking._eventDate,
+                                booking._eventTime,
+                                booking._eventLocation,
+                                booking._specialRequest
+                            );
+                            newBooking._bookingId = booking._bookingId;
+                            newBooking._status = booking._status;
+                            newBooking._bookingDate = booking._bookingDate;
+                            return newBooking;
+                        }
+                        return null;
+                    }).filter(booking => booking !== null);
+                }
+            }
+            
+            // Inisialisasi music packages default
+            initializeDefaultMusic() {
+                this.musicPackages = [
+                    new MusicPackage(1, "Paket Dangdut Lengkap", "Dangdut", 5, 2500000, "Paket lengkap musik dangdut dengan sound system profesional untuk 5 jam"),
+                    new MusicPackage(2, "Paket Koplo Special", "Koplo", 4, 2000000, "Musik koplo terbaik dengan MC dan peralatan lengkap untuk 4 jam"),
+                    new MusicPackage(3, "Paket Jhandutan Hits", "Jhandutan", 3, 1500000, "Koleksi lagu jhandutan terpopuler untuk 3 jam acara"),
+                    new MusicPackage(4, "Paket DO Music 2015", "DO Music 2015", 6, 3000000, "Paket spesial DO Music dengan lagu-lagu hits tahun 2015 untuk 6 jam"),
+                    new MusicPackage(5, "Paket Mix All Genre", "Mix", 5, 2800000, "Campuran berbagai genre musik untuk segala usia, durasi 5 jam"),
+                    new MusicPackage(6, "Paket Wedding Special", "Mix", 8, 4500000, "Paket spesial pernikahan dengan musik romantis dan dansa")
+                ];
+                
+                // Simpan ke Local Storage
+                this.storageManager.saveData('booking_music_packages', this.musicPackages);
+            }
+            
+            // Inisialisasi UI
+            initUI() {
+                // Setup navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = link.getAttribute('data-page');
+                        this.showPage(page);
+                        
+                        // Update active nav link
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                    });
+                });
+                
+                // Setup form booking
+                document.getElementById('booking-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.submitBooking();
+                });
+                
+                // Setup form tambah music package
+                document.getElementById('add-music-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addMusicPackage();
+                });
+                
+                // Set min date untuk input tanggal (hari ini)
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('event-date').setAttribute('min', today);
+                
+                // Render daftar music packages
+                this.renderMusicList();
+                
+                // Render daftar music packages untuk manajemen
+                this.renderMusicManagementList();
+                
+                // Render bookings jika ada
+                this.renderBookings();
+            }
+            
+            // Tampilkan halaman tertentu
+            showPage(pageId) {
+                // Sembunyikan semua halaman
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Tampilkan halaman yang dipilih
+                document.getElementById(`${pageId}-page`).classList.add('active');
+                
+                // Update konten berdasarkan halaman
+                if (pageId === 'booking') {
+                    this.renderMusicList();
+                } else if (pageId === 'schedule') {
+                    this.renderBookings();
+                } else if (pageId === 'manage') {
+                    this.renderMusicManagementList();
+                } else if (pageId === 'home') {
+                    this.updateStats();
+                }
+            }
+            
+            // Render daftar music packages
+            renderMusicList() {
+                const musicListElement = document.getElementById('music-list');
+                
+                if (this.musicPackages.length === 0) {
+                    musicListElement.innerHTML = '<div class="empty-state"><i class="fas fa-music"></i><h3>Tidak Ada Paket Musik Tersedia</h3><p>Silakan tambahkan paket musik melalui halaman Kelola Musik.</p></div>';
+                    return;
+                }
+                
+                musicListElement.innerHTML = this.musicPackages.map(music => `
+                    <div class="music-card" data-music-id="${music.id}">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(music.name)}&background=${encodeURIComponent('8a2be2')}&color=ffffff&size=100" alt="${music.name}" class="music-avatar">
+                        <h3 class="music-name">${music.name}</h3>
+                        <span class="music-genre">${music.genre}</span>
+                        <p>${music.description}</p>
+                        <div style="margin-top: 15px;">
+                            <p><strong>Durasi:</strong> ${music.duration} jam</p>
+                            <p><strong>Harga:</strong> ${music.formattedRate()}</p>
+                        </div>
+                        <button class="btn" style="margin-top: 15px;" onclick="bookingApp.selectMusic(${music.id})">Pilih Paket Ini</button>
+                    </div>
+                `).join('');
+            }
+            
+            // Render daftar music packages untuk manajemen
+            renderMusicManagementList() {
+                const managementListElement = document.getElementById('music-management-list');
+                
+                if (this.musicPackages.length === 0) {
+                    managementListElement.innerHTML = '<div class="empty-state"><i class="fas fa-music"></i><h3>Tidak Ada Paket Musik</h3><p>Silakan tambahkan paket musik menggunakan form di atas.</p></div>';
+                    return;
+                }
+                
+                managementListElement.innerHTML = this.musicPackages.map(music => `
+                    <div class="booking-item">
+                        <div class="booking-info">
+                            <h4>${music.name}</h4>
+                            <div class="booking-meta">
+                                <span><i class="fas fa-music"></i> ${music.genre}</span>
+                                <span><i class="fas fa-clock"></i> ${music.duration} jam</span>
+                                <span><i class="fas fa-money-bill-wave"></i> ${music.formattedRate()}</span>
+                            </div>
+                            <p style="margin-top: 8px;">${music.description}</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary" onclick="bookingApp.deleteMusicPackage(${music.id})">Hapus</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Render daftar booking
+            renderBookings() {
+                const bookingsContainer = document.getElementById('bookings-container');
+                const noBookingsElement = document.getElementById('no-bookings');
+                
+                if (this.bookings.length === 0) {
+                    bookingsContainer.innerHTML = '';
+                    noBookingsElement.style.display = 'block';
+                    return;
+                }
+                
+                noBookingsElement.style.display = 'none';
+                
+                // Urutkan booking berdasarkan tanggal (terbaru pertama)
+                const sortedBookings = [...this.bookings].sort((a, b) => {
+                    return new Date(b._eventDate) - new Date(a._eventDate);
+                });
+                
+                bookingsContainer.innerHTML = sortedBookings.map(booking => {
+                    const details = booking.getBookingDetails();
+                    const statusClass = details.status;
+                    const statusText = details.status === 'pending' ? 'Menunggu Konfirmasi' : 
+                                     details.status === 'confirmed' ? 'Dikonfirmasi' : 'Dibatalkan';
+                    
+                    return `
+                        <div class="booking-item">
+                            <div class="booking-info">
+                                <h4>${details.musicName} - ${details.eventType}</h4>
+                                <div class="booking-meta">
+                                    <span><i class="fas fa-user"></i> ${details.customerName}</span>
+                                    <span><i class="fas fa-calendar"></i> ${details.eventDate}</span>
+                                    <span><i class="fas fa-clock"></i> ${details.eventTime}</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> ${details.eventLocation}</span>
+                                </div>
+                                <p><strong>Durasi:</strong> ${details.duration} jam | <strong>Harga:</strong> ${new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(details.rate)}</p>
+                                ${details.specialRequest ? `<p><strong>Permintaan Khusus:</strong> ${details.specialRequest}</p>` : ''}
+                            </div>
+                            <div>
+                                <span class="status ${statusClass}">${statusText}</span>
+                                <div style="margin-top: 10px;">
+                                    ${details.status === 'pending' ? 
+                                        `<button class="btn" onclick="bookingApp.updateBookingStatus(${details.bookingId}, 'confirmed')">Konfirmasi</button>
+                                         <button class="btn btn-secondary" style="margin-left: 10px;" onclick="bookingApp.updateBookingStatus(${details.bookingId}, 'cancelled')">Batalkan</button>` 
+                                        : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update statistik di halaman beranda
+            updateStats() {
+                document.getElementById('total-music-count').textContent = this.musicPackages.length;
+                document.getElementById('total-bookings-count').textContent = this.bookings.length;
+                const activeBookings = this.bookings.filter(b => b.status === 'pending' || b.status === 'confirmed').length;
+                document.getElementById('active-bookings-count').textContent = activeBookings;
+            }
+            
+            // Pilih music package untuk booking
+            selectMusic(musicId) {
+                const musicPackage = this.musicPackages.find(m => m.id === musicId);
+                if (musicPackage) {
+                    this.selectedMusic = musicPackage;
+                    document.getElementById('selected-music').value = musicPackage.displayInfo();
+                    this.showNotification('success', `Paket ${musicPackage.name} dipilih untuk booking`);
+                    
+                    // Scroll ke formulir booking
+                    document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            // Submit booking baru
+            submitBooking() {
+                if (!this.selectedMusic) {
+                    this.showNotification('error', 'Silakan pilih paket musik terlebih dahulu');
+                    return;
+                }
+                
+                // Ambil data dari form
+                const customerName = document.getElementById('customer-name').value;
+                const customerPhone = document.getElementById('customer-phone').value;
+                const eventType = document.getElementById('event-type').value;
+                const eventDate = document.getElementById('event-date').value;
+                const eventTime = document.getElementById('event-time').value;
+                const eventLocation = document.getElementById('event-location').value;
+                const specialRequest = document.getElementById('special-request').value;
+                
+                // Validasi input
+                if (!customerName || !customerPhone || !eventType || !eventDate || !eventTime || !eventLocation) {
+                    this.showNotification('error', 'Harap isi semua field yang wajib diisi');
+                    return;
+                }
+                
+                // Validasi tanggal tidak boleh sudah lewat
+                const selectedDate = new Date(eventDate);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    this.showNotification('error', 'Tanggal acara tidak boleh sudah lewat');
+                    return;
+                }
+                
+                // Buat booking baru
+                const newBooking = new Booking(
+                    this.selectedMusic,
+                    customerName,
+                    customerPhone,
+                    eventType,
+                    eventDate,
+                    eventTime,
+                    eventLocation,
+                    specialRequest
+                );
+                
+                // Tambahkan ke daftar booking
+                this.bookings.push(newBooking);
+                
+                // Simpan ke Local Storage
+                this.storageManager.saveData('booking_music_bookings', this.bookings);
+                
+                // Reset form
+                document.getElementById('booking-form').reset();
+                document.getElementById('selected-music').value = '';
+                this.selectedMusic = null;
+                
+                // Tampilkan notifikasi
+                this.showNotification('success', `Booking berhasil dibuat! Kode booking: #${newBooking.bookingId}`);
+                
+                // Update UI
+                this.updateStats();
+                
+                // Tampilkan halaman jadwal
+                this.showPage('schedule');
+            }
+            
+            // Tambah music package baru
+            addMusicPackage() {
+                // Ambil data dari form
+                const name = document.getElementById('music-name').value;
+                const genre = document.getElementById('music-genre').value;
+                const duration = parseInt(document.getElementById('music-duration').value);
+                const rate = parseInt(document.getElementById('music-rate').value);
+                const description = document.getElementById('music-description').value;
+                
+                // Validasi input
+                if (!name || !genre || !duration || !rate || !description) {
+                    this.showNotification('error', 'Harap isi semua field');
+                    return;
+                }
+                
+                if (duration < 1) {
+                    this.showNotification('error', 'Durasi minimal 1 jam');
+                    return;
+                }
+                
+                if (rate < 0) {
+                    this.showNotification('error', 'Harga tidak valid');
+                    return;
+                }
+                
+                // Generate ID baru
+                const newId = this.musicPackages.length > 0 ? Math.max(...this.musicPackages.map(m => m.id)) + 1 : 1;
+                
+                // Buat music package baru
+                const newMusicPackage = new MusicPackage(newId, name, genre, duration, rate, description);
+                
+                // Tambahkan ke daftar music packages
+                this.musicPackages.push(newMusicPackage);
+                
+                // Simpan ke Local Storage
+                this.storageManager.saveData('booking_music_packages', this.musicPackages);
+                
+                // Reset form
+                document.getElementById('add-music-form').reset();
+                
+                // Tampilkan notifikasi
+                this.showNotification('success', `Paket musik ${name} berhasil ditambahkan`);
+                
+                // Update UI
+                this.renderMusicList();
+                this.renderMusicManagementList();
+                this.updateStats();
+            }
+            
+            // Hapus music package
+            deleteMusicPackage(musicId) {
+                if (confirm('Apakah Anda yakin ingin menghapus paket musik ini?')) {
+                    // Cek apakah paket musik sedang dibooking
+                    const hasBookings = this.bookings.some(booking => booking.id === musicId);
+                    
+                    if (hasBookings) {
+                        this.showNotification('error', 'Tidak dapat menghapus paket musik yang sedang dibooking');
+                        return;
+                    }
+                    
+                    // Hapus dari daftar
+                    this.musicPackages = this.musicPackages.filter(music => music.id !== musicId);
+                    
+                    // Simpan ke Local Storage
+                    this.storageManager.saveData('booking_music_packages', this.musicPackages);
+                    
+                    // Tampilkan notifikasi
+                    this.showNotification('success', 'Paket musik berhasil dihapus');
+                    
+                    // Update UI
+                    this.renderMusicList();
+                    this.renderMusicManagementList();
+                    this.updateStats();
+                }
+            }
+            
+            // Update status booking
+            updateBookingStatus(bookingId, newStatus) {
+                const booking = this.bookings.find(b => b.bookingId === bookingId);
+                
+                if (booking) {
+                    booking.status = newStatus;
+                    
+                    // Simpan ke Local Storage
+                    this.storageManager.saveData('booking_music_bookings', this.bookings);
+                    
+                    // Tampilkan notifikasi
+                    const statusText = newStatus === 'confirmed' ? 'dikonfirmasi' : 'dibatalkan';
+                    this.showNotification('success', `Booking #${bookingId} berhasil ${statusText}`);
+                    
+                    // Update UI
+                    this.renderBookings();
+                    this.updateStats();
+                }
+            }
+            
+            // Tampilkan notifikasi
+            showNotification(type, message) {
+                const notificationArea = document.getElementById('notification-area');
+                
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                
+                notificationArea.appendChild(notification);
+                
+                // Hapus notifikasi setelah 3 detik
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+        
+        // Inisialisasi aplikasi saat halaman dimuat
+        let bookingApp;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            bookingApp = new BookingApp();
+        });
+        
+        // Ekspos aplikasi ke global scope untuk fungsi onclick di HTML
+        window.bookingApp = bookingApp;
+    </script>
+</body>
+</html>
